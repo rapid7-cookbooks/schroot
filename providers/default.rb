@@ -15,6 +15,17 @@ def whyrun_supported?
   true
 end
 
+def personality(arch)
+  case arch
+  when 'amd64'
+    @personality = 'linux'
+  when 'i386'
+    @personality = 'linux32'
+  else
+    Chef::Log.error("Unsupported platform #{arch} specified.")
+  end
+end
+
 action :create do
   directory new_resource.path do
     recursive true
@@ -35,7 +46,7 @@ action :create do
               :users => new_resource.users.join(',').to_s,
               :groups => new_resource.groups.join(',').to_s,
               :root_groups => new_resource.root_groups.join(',').to_s,
-              :arch => new_resource.arch
+              :arch => personality(new_resource.arch)
     action    :create
   end
 
