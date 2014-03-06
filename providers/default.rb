@@ -15,7 +15,7 @@ def whyrun_supported?
   true
 end
 
-def personality(arch)
+def schroot_personality(arch)
   case arch
   when 'amd64'
     @personality = 'linux'
@@ -29,10 +29,8 @@ end
 action :create do
   directory new_resource.path do
     recursive true
-    action :nothing
+    action :create
   end
-
-  Chef::Log.debug('Template attribute provided, all other attributes ignored.')
 
   template "/etc/schroot/chroot.d/#{new_resource.name}.conf" do
     source    'schroot.conf.erb'
@@ -46,13 +44,32 @@ action :create do
               :users => new_resource.users.join(',').to_s,
               :groups => new_resource.groups.join(',').to_s,
               :root_groups => new_resource.root_groups.join(',').to_s,
-              :arch => personality(new_resource.arch)
+              :arch => schroot_personality(new_resource.arch)
     action    :create
   end
 
-  #TODO: Make this idempotent, and possibly a seperate class.
-  debootstrap = shell_out!("debootstrap", "--arch=#{new_resource.arch}", "--components=#{new_resource.components.join(',').to_s}", new_resource.dist, new_resource.path, new_resource.mirror)
+  unless ::File.exists?(::File.join(new_resource.path, '.debootstrap'))
+    debootstrap = shell_out("debootstrap",
+                              "--arch=#{new_resource.arch}",
+                              "--components=#{new_resource.components.join(',').to_s}",
+                              new_resource.dist,
+                              new_resource.path,
+                              new_resource.mirror)
+    # The error? method was not implemented in Mixlib:ShellOut v1.2 used by Chef 11.10.4
+    # so we had to duplicate it's behavior here.
+    if Array(debootstrap.valid_exit_codes).include?(debootstrap.exitstatus)
+      file ::File.join(new_resource.path, '.debootstrap') do
+        action :create
+        backup false
+      end
+    else
+      file ::File.join(new_resource.path, '.debootstrap') do
+        action :delete
+      end
+    end
+  end
 end
+
 
 action :remove do
   file "/etc/schroot/chroot.d/#{new_resource.name}.conf" do
