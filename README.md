@@ -61,6 +61,26 @@ end
 * `components` - Array of components to use when creating the chroot. Default: ['main', 'restricted', 'universe', 'multiverse']
 * `mirror` - Mirror from which to retrieve packages. Default: 'http://mirror.anl.gov/ubuntu'
 
+### schroot_execute
+
+#### Example
+``` ruby
+# Execute command within a chroot
+schroot_execute 'hardy_schroot' do
+  command "mkdir /example_dir"
+  user 'root'
+  action :run
+end
+```
+
+#### Parameters
+* `name` - The name of the schroot to use to execute the command.
+
+The remander of the parameters mirror the Execute resource as this extends the
+Execute resource to run within the schroot.
+
+
+
 # Author
 
 Author:: Ryan Hass (<ryan_hass@rapid7.com>)
