@@ -2,7 +2,10 @@ schroot cookbook
 ================
 The schroot cookbook is used to create chroot environments which
 can be used by non-root users. The creation of the environments
-does require root access.
+does require root access. Additionally, this cookbook allows one
+to create environments of old vulnerable operating systems for
+various purposes without having to expose them to your
+infrastructure as a directly accessible/addressable asset.
 
 Requirements
 ------------
