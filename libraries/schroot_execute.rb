@@ -1,6 +1,10 @@
 #
 # Author:: Ryan Hass (<ryan_hass@rapid7.com>)
+# Cookbook Name:: schroot
+# Library:: schroot_execute
+#
 # Copyright:: Copyright (c) 2014 Rapid7, LLC.
+#
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
