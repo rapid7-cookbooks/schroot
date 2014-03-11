@@ -95,10 +95,6 @@ class Chef
             cmd
           end
 
-          def run_command_compatible_options(*command_args)
-            super
-          end
-
         end
       end
     end
