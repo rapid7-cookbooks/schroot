@@ -73,13 +73,34 @@ schroot_execute 'hardy_schroot' do
 end
 ```
 
+#### Actions
+- `:run` - Execute the command
+- `:nothing` - No-op, typically used when called by a notifies from another action.
+
 #### Parameters
 * `name` - The name of the schroot to use to execute the command.
 
 The remander of the parameters mirror the Execute resource as this extends the
 Execute resource to run within the schroot.
 
+### package
+This adds an additional provider to the standard `package` resource.
 
+#### Actions
+All the standard `package` actions apply.
+
+See the Chef package resource documentation for details.
+
+#### Example
+``` ruby
+# Install a package within a chroot
+package 'build-essential' do
+  provider Chef::Provider::Package::Apt::Schroot
+  schroot 'hardy_schroot'
+  user 'root'
+  action :install
+end
+```
 
 # Author
 
