@@ -67,7 +67,6 @@ class Chef
             @schroot = nil
           end
 
-
         end
       end
     end
@@ -86,7 +85,13 @@ class Chef
           end
 
           def shell_out(*command_args)
-            schroot_cmd = ['schroot', '-c', new_resource.schroot, '-u', new_resource.user, *command_args]
+            # command_args is an array in which the first element is a string
+            # containing the command to be executed, and the subsequent element
+            # is a hash containing options to be handled by mixlib-shellout. We
+            # convert the whole array to a string and back into an array of
+            # elements to append the value of command_args as individual elements.
+            schroot_args = ['schroot', '-c', new_resource.schroot, '-u', new_resource.user, '--', command_args[0]].join(' ')
+            schroot_cmd = [ schroot_args ]
             cmd = Mixlib::ShellOut.new(*run_command_compatible_options(schroot_cmd))
             if STDOUT.tty? && !Chef::Config[:daemon] && Chef::Log.debug?
               cmd.live_stream = STDOUT
