@@ -23,8 +23,8 @@ Put `depends 'schroot'` in your metadata.rb to gain access to the
 schroot resource.
 
 
-Resource/Provider
-----------------
+Resources/Providers
+-------------------
 ### schroot
 
 #### Example
@@ -101,6 +101,22 @@ package 'build-essential' do
   action :install
 end
 ```
+
+Contributing
+------------
+1. Fork the repository on Github
+2. Create a named feature branch (like `add_component_x`)
+3. Write your change
+4. Write tests for your change (if applicable)
+5. Run the tests, ensuring they all pass
+6. Submit a Pull Request using Github
+
+To-Do
+-----
+- Add support for schroot sessions
+- Add support for unionfs and overlays
+- Add chefspec to the cookbook
+- Add support for btrfs
 
 # Author
 
